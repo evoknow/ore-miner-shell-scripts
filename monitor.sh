@@ -13,7 +13,7 @@ main() {
 	ore_process_count=$(ps auxww | grep 'ore --rpc' | grep 'mine --threads' | grep -v 'grep' | wc -l)
 
 	# Run the ore command to get rewards and capture the output
-	rewards_output=$($ORE --keypair $DIR/my-solana-wallet/my-keypair.json rewards)
+	rewards_output=$($ORE --keypair $KEYPAIR rewards)
 
 	# Get the solana balance
 	solana_balance=$($SOLANA balance --keypair $KEYPAIR)
