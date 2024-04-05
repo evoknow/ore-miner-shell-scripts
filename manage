@@ -1,0 +1,69 @@
+#!/bin/bash
+
+source config.sh
+
+# Function to see whats running
+check_status() {
+
+ CNT=`ps auxww | grep "$ORE" | grep priority | grep [m]ine | wc -l` 
+ echo "Total $CNT miner processes running";
+
+ CNT=`ps auxww | grep "$ORE" | grep priority | grep [c]laim | wc -l` 
+ echo "Total $CNT claim processes running";
+
+ CNT=`ps auxww | grep 'bash .monitor.sh' | wc -l ` 
+ echo "Total $CNT monitor  running";
+
+}
+
+# Function to start mine.sh in the background
+start_mine() {
+    local count=${1:-5}  # Default to 5 if no argument is provided
+    for ((i=0; i<count; i++)); do
+        nohup ./mine.sh > /dev/null 2>&1 &
+    done
+    echo "$count instances of mine.sh started in the background."
+
+    echo "Starting monitoring...";
+    nohup ./monitor.sh > /dev/null 2>&1 &
+
+    echo "Starting claim process...";
+    nohup ./claim.sh > /dev/null 2>&1 &
+}
+
+# Function to kill all running instances of mine.sh
+shutdown_all() {
+    pkill -f './mine.sh'
+    echo "Terminating all mine.sh"
+ 
+    echo "Terminating all $ORE processes";
+    ps auxww | grep ore | grep rpc | awk '{print $2}' | xargs kill -9
+
+    pkill -f './claim.sh'
+    echo "Terminating claim.sh"
+
+    pkill -f './monitor.sh'
+    echo "Terminating monitor.sh"
+}
+
+# Main script logic
+case "$1" in
+
+    --status)
+        check_status
+        ;;
+    --kill)
+        shutdown_all
+        ;;
+    *)
+        # Check if the argument is a positive integer, default to 5 if not
+        if [[ $1 =~ ^[0-9]+$ ]]; then
+            start_mine $1
+        else
+            echo "No valid number provided, defaulting to 5 instances."
+            start_mine 5
+        fi
+        ;;
+esac
+
+rm -f nohup.out
