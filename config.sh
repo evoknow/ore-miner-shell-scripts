@@ -31,4 +31,3 @@ export KEYPAIR=$HOME/my-solana-wallet/my-keypair.json
 export THREADS=4
 export ORE=`which ore`
 export SOLANA=`which solana`
-
