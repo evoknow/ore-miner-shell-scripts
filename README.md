@@ -4,6 +4,29 @@
 To make it easy to manage ore mining, claiming and monitoring
 
 
+## Installation
+1. Download source
+
+2. Rename directory created by git to ore
+   $ mv ore-miner-shell-scripts ore
+
+3. Change directory to ore. 
+   $ cd ore
+
+4. Change permissions to run the scripts
+   $ chmod +x *.sh manage
+
+5. If you are using custom Helius RPC, follow the Custom Helius RPC section below before continuing
+
+6. Run manage
+   $ ./manage 
+
+7. To check status of  what is running:
+   $ ./manage --status
+
+8. To kill all processes
+   $ ./manage --kill
+
 ## Monitoring
 Currently the monitoring tool pushes data to my personal website.
 https://mjkabir.com/orectrl/report
