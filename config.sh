@@ -31,6 +31,7 @@ debug() {
     fi
 }
 
+export MAX=5
 export DEBUG=$DEBUG
 export DIR=$HOME
 export HOST=`hostname`;

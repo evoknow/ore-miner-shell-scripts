@@ -18,16 +18,18 @@ check_status() {
 
 # Function to start mine.sh in the background
 start_mine() {
-    local count=${1:-5}  # Default to 5 if no argument is provided
+    local count=${1:-$MAX}  # Default to 5 if no argument is provided
     for ((i=0; i<count; i++)); do
         nohup ./mine.sh > /dev/null 2>&1 &
     done
     echo "$count instances of mine.sh started in the background."
 
     echo "Starting monitoring...";
+    pkill -f './monitor.sh'
     nohup ./monitor.sh > /dev/null 2>&1 &
 
     echo "Starting claim process...";
+    pkill -f './claim.sh'
     nohup ./claim.sh > /dev/null 2>&1 &
 }
 
